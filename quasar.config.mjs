@@ -59,8 +59,8 @@ export default configure(() => ({
     bundler: "builder",
 
     builder: {
-      appId: "com.MobilTrack",
-      productName: "MobilTrack",
+      appId: "com.TallerPRO",
+      productName: "TallerPRO",
 
       directories: {
         output: "dist_electron",
@@ -95,8 +95,8 @@ export default configure(() => ({
         allowToChangeInstallationDirectory: true,
         createDesktopShortcut: true,
         createStartMenuShortcut: true,
-        shortcutName: "MobilTrack",
-        uninstallDisplayName: "MobilTrack",
+        shortcutName: "TallerPRO",
+        uninstallDisplayName: "TallerPRO",
         deleteAppDataOnUninstall: false,
         runAfterFinish: true,
         allowElevation: true,
@@ -111,7 +111,7 @@ export default configure(() => ({
       },
 
       dmg: {
-        title: "MobilTrack",
+        title: "TallerPRO",
         contents: [
           { x: 410, y: 150, type: "link", path: "/Applications" },
           { x: 130, y: 150, type: "file" },
@@ -132,7 +132,7 @@ export default configure(() => ({
         {
           provider: "github",
           owner: "sirius54s",
-          repo: "MobilTrack",
+          repo: "TallerPRO",
         },
       ],
     },
