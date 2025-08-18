@@ -100,12 +100,30 @@ jobs:
         run: npm install -g @quasar/cli
 
       - name: Build Quasar
+        env:
+          # Variables de Firebase
+          VITE_MEASUREMENT_ID: ${{ secrets.VITE_MEASUREMENT_ID }}
+          VITE_APP_ID: ${{ secrets.VITE_APP_ID }}
+          VITE_MESSAGING_SENDER_ID: ${{ secrets.VITE_MESSAGING_SENDER_ID }}
+          VITE_STORAGE_BUCKET: ${{ secrets.VITE_STORAGE_BUCKET }}
+          VITE_PROJECT_ID: ${{ secrets.VITE_PROJECT_ID }}
+          VITE_AUTH_DOMAIN: ${{ secrets.VITE_AUTH_DOMAIN }}
+          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
         run: npm run build
 
       - name: Build and publish Electron (Windows)
         env:
+          # GitHub Tokens
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          # Variables de Firebase para el build de Electron
+          VITE_MEASUREMENT_ID: ${{ secrets.VITE_MEASUREMENT_ID }}
+          VITE_APP_ID: ${{ secrets.VITE_APP_ID }}
+          VITE_MESSAGING_SENDER_ID: ${{ secrets.VITE_MESSAGING_SENDER_ID }}
+          VITE_STORAGE_BUCKET: ${{ secrets.VITE_STORAGE_BUCKET }}
+          VITE_PROJECT_ID: ${{ secrets.VITE_PROJECT_ID }}
+          VITE_AUTH_DOMAIN: ${{ secrets.VITE_AUTH_DOMAIN }}
+          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
         run: npm run build:electron -- --win --publish=always
 
       - name: Upload artifacts (fallback)
