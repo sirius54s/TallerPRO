@@ -30,57 +30,118 @@ let initError: {
 
 // Configuración firebase
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_apiKey,
-  authDomain: import.meta.env.VITE_authDomain,
-  projectId: import.meta.env.VITE_projectId,
-  storageBucket: import.meta.env.VITE_storageBucket,
-  messagingSenderId: import.meta.env.VITE_messagingSenderId,
-  appId: import.meta.env.VITE_appId,
-  measurementId: import.meta.env.VITE_measurementId,
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 }
 
-// Intentar inicializar Firebase
-try {
-  firebaseApp = initializeApp(firebaseConfig)
-  auth = getAuth(firebaseApp)
-  db = getFirestore(firebaseApp)
-  console.log("✅ Firebase inicializado correctamente")
-} catch (error: unknown) {
-  console.log("❌ Error initializing Firebase:", error)
+// Función para validar configuración
+function validateFirebaseConfig(): boolean {
+  const requiredFields = [
+    "apiKey",
+    "authDomain",
+    "projectId",
+    "storageBucket",
+    "messagingSenderId",
+    "appId",
+  ]
 
-  // Type guard para verificar si es un error
-  const firebaseError = error as { code?: string; message?: string }
+  for (const field of requiredFields) {
+    if (!firebaseConfig[field as keyof typeof firebaseConfig]) {
+      console.error(`❌ Missing Firebase config: ${field}`)
+      return false
+    }
+  }
+  return true
+}
 
-  // Mapear errores
-  if (firebaseError?.code === "auth/invalid-api-key") {
-    initError = {
+// Función para mapear errores correctamente
+function mapFirebaseError(error: unknown) {
+  const firebaseError = error as {
+    code?: string
+    message?: string
+    name?: string
+  }
+
+  console.error("Firebase Error Details:", {
+    code: firebaseError?.code,
+    message: firebaseError?.message,
+    name: firebaseError?.name,
+  })
+
+  // Mapear errores de inicialización correctamente
+  if (
+    firebaseError?.message?.includes("API key not valid") ||
+    firebaseError?.code === "app/invalid-api-key"
+  ) {
+    return {
       code: "INVALID_API_KEY",
       name: "ERROR DEL SERVIDOR",
       message: "Contacta con el soporte",
       errorCode: ERROR_CODES.INVALID_API_KEY,
     }
-  } else if (firebaseError?.code === "auth/invalid-project-id") {
-    initError = {
+  }
+
+  if (
+    firebaseError?.message?.includes("Project ID") ||
+    firebaseError?.code === "app/invalid-project-id"
+  ) {
+    return {
       code: "INVALID_PROJECT",
       name: "ERROR DEL SERVIDOR",
       message: "Contacta con el soporte",
       errorCode: ERROR_CODES.INVALID_PROJECT,
     }
-  } else if (firebaseError?.code?.includes("network")) {
-    initError = {
+  }
+
+  if (
+    firebaseError?.message?.includes("network") ||
+    firebaseError?.message?.includes("fetch") ||
+    firebaseError?.name === "NetworkError"
+  ) {
+    return {
       code: "NETWORK_ERROR",
       name: "Sin internet",
-      message: "Porfavor conectate a internet",
+      message: "Por favor conéctate a internet",
       errorCode: ERROR_CODES.NETWORK_ERROR,
     }
-  } else {
-    initError = {
-      code: "FIREBASE_ERROR",
-      name: "ERROR DEL SERVIDOR",
-      message: "Ocurrio un problema inesperado",
-      errorCode: ERROR_CODES.FIREBASE_ERROR,
-    }
   }
+
+  // Error genérico
+  return {
+    code: "FIREBASE_ERROR",
+    name: "ERROR DEL SERVIDOR",
+    message: "Ocurrió un problema inesperado",
+    errorCode: ERROR_CODES.FIREBASE_ERROR,
+  }
+}
+
+// Intentar inicializar Firebase
+try {
+  // Primero validar que tenemos toda la configuración
+  if (!validateFirebaseConfig()) {
+    throw new Error("Missing required Firebase configuration")
+  }
+
+  console.log("🔥 Iniciando Firebase con configuración:", {
+    hasApiKey: !!firebaseConfig.apiKey,
+    apiKeyLength: firebaseConfig.apiKey?.length || 0,
+    projectId: firebaseConfig.projectId,
+    authDomain: firebaseConfig.authDomain,
+  })
+
+  firebaseApp = initializeApp(firebaseConfig)
+  auth = getAuth(firebaseApp)
+  db = getFirestore(firebaseApp)
+
+  console.log("✅ Firebase inicializado correctamente")
+} catch (error: unknown) {
+  console.error("❌ Error initializing Firebase:", error)
+  initError = mapFirebaseError(error)
 }
 
 // Funciones para exportar
