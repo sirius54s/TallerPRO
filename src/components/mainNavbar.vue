@@ -91,10 +91,10 @@ function handleConfigSave(settings: Settings) {
       flat
       dense
       round
-      v-show="auth.user"
       icon="settings"
       aria-label="Configuración"
       @click="openConfigModal"
+      v-show="auth.user"
     />
 
     <q-btn

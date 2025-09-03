@@ -1,4 +1,3 @@
-// src/boot/AuthRouter.ts
 import { Router } from "vue-router"
 import { auth, db } from "src/boot/firebaseConfig"
 import { User, onAuthStateChanged } from "firebase/auth"
