@@ -1,47 +1,26 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import { useAuthStore } from "src/stores/authStore"
-import { auth } from "src/boot/firebaseConfig"
-import { signInAnonymously } from "firebase/auth"
 
-const authStore = useAuthStore()
+const loading = ref(true)
+const conectionInternet = ref<boolean>()
 
-const firebaseError = ref<string | null>(null)
+setTimeout(() => {
+  loading.value = false
+}, 4000)
 
 onMounted(async () => {
-  try {
-    await signInAnonymously(auth) // Esto forzará validar la API key
-  } catch (error: any) {
-    if (
-      error?.code?.includes("api-key") ||
-      error?.code === "auth/invalid-api-key"
-    ) {
-      firebaseError.value = "E1001"
-    } else if (error?.code?.includes("network")) {
-      firebaseError.value = "E1002"
-    } else {
-      firebaseError.value = "E1004"
-    }
-  }
+  conectionInternet.value = navigator.onLine
 })
 </script>
 
 <template>
   <div>
-    <div v-if="firebaseError" class="absolute-full flex flex-center flex-col">
-      <p class="text-center">
-        Ha ocurrido un error al inicializar la configuración. Código de error:
-        {{ firebaseError }}
+    <div class="absolute-full flex flex-center flex-col text-center">
+      <q-spinner-ball v-if="loading" color="primary" size="12em" />
+      <p v-if="!conectionInternet" class="text-center">
+        No hay conexion a internet...
       </p>
     </div>
-
-    <div
-      v-else-if="authStore.loading && !authStore.initialized"
-      class="absolute-full flex flex-center flex-col"
-    >
-      <q-spinner-ball color="primary" size="10em" />
-    </div>
-
-    <router-view v-else />
+    <router-view v-if="(conectionInternet, !loading)" />
   </div>
 </template>
