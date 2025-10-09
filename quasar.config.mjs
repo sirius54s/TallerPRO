@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from "node:url"
 
 export default configure(() => ({
   // Archivos de arranque
-  boot: ["firebaseConfig", "pinia", "axios"],
+  boot: ["pinia", "axios"],
 
   // Estilos globales
   css: ["app.sass"],
@@ -84,6 +84,7 @@ export default configure(() => ({
       ],
 
       win: {
+        icon: "src-electron/icons/icon.ico",
         target: [{ target: "nsis", arch: ["x64"] }],
         verifyUpdateCodeSignature: false,
         signAndEditExecutable: false,
@@ -91,6 +92,8 @@ export default configure(() => ({
       },
 
       nsis: {
+        installerIcon: "src-electron/icons/icon.ico",
+        uninstallerIcon: "src-electron/icons/icon.ico",
         oneClick: false,
         allowToChangeInstallationDirectory: true,
         createDesktopShortcut: true,

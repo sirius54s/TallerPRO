@@ -99,7 +99,9 @@ const submitForm = async () => {
       detailNote: formData.detailNote,
       assignedTechnician: formData.assignedTechnician,
       serviceType: formData.serviceType,
-      estimatedCost: Number(formData.estimatedCost) || 0,
+      estimatedCost:
+        Number(String(formData.estimatedCost).replace(/\./g, "")) || 0,
+
       deliveryDate: formData.deliveryDate || undefined,
     }
 
@@ -129,7 +131,6 @@ function closeModal() {
 
 <template>
   <q-card class="q-ma-md">
-    <!-- Encabezado -->
     <q-bar class="q-pa-xs">
       <div class="q-pl-md">Agregar un nuevo registro</div>
       <q-space />
@@ -229,6 +230,7 @@ function closeModal() {
                   filled
                   dense
                   v-model="formData.estimatedCost"
+                  update:model-value="val => formData.estimatedCost = String(val).replace(/\./g, '')"
                   label="Costo (CLP)"
                   prefix="$"
                   class="q-mb-sm"
@@ -248,7 +250,6 @@ function closeModal() {
               </div>
             </div>
 
-            <!-- Técnico - Ahora dinámico -->
             <div class="row q-col-gutter-sm">
               <div class="col-12">
                 <q-select

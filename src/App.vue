@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
+import { useAuthStore } from "src/stores/authStore"
+
+const authStore = useAuthStore()
+
+onMounted(async () => {
+  await authStore.initializeAuth()
+})
 
 const loading = ref(true)
 const conectionInternet = ref<boolean>()

@@ -16,9 +16,10 @@ const stats = computed(() => {
 
   const byStatus = {
     pendiente: repairs.filter((r) => r.status === "Pendiente").length,
-    proceso: repairs.filter((r) => r.status === "En proceso").length,
+
     completado: repairs.filter((r) => r.status === "Completado").length,
-    entregado: repairs.filter((r) => r.status === "Entregado").length,
+    cancelado: repairs.filter((r) => r.status === "Cancelado").length,
+    NA: "N/A",
   }
 
   const totalCost = repairs.reduce(
@@ -32,10 +33,7 @@ const stats = computed(() => {
     byStatus,
     totalCost,
     avgCost,
-    completionRate:
-      total > 0
-        ? ((byStatus.completado + byStatus.entregado) / total) * 100
-        : 0,
+    completionRate: total > 0 ? (byStatus.completado / total) * 100 : 0,
   }
 })
 
@@ -51,8 +49,9 @@ function getStatusColor(status: string) {
       return "blue"
     case "completado":
       return "green"
-    case "entregado":
+    case "NA":
       return "purple"
+
     default:
       return "grey"
   }

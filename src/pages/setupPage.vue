@@ -5,15 +5,28 @@ import { useAuthStore } from "src/stores/authStore"
 import { useConfigStore, THEME_OPTIONS } from "src/stores/configStore"
 import { useQuasar } from "quasar"
 
+interface Technical {
+  id: string
+  name: string
+}
+
+interface FormData {
+  name: string
+  company: string
+  phone: string
+  address: string
+  technical: Technical[]
+}
+
 const router = useRouter()
 const $q = useQuasar()
 const authStore = useAuthStore()
 const configStore = useConfigStore()
 
-const loading = ref(false)
+const loading = ref<boolean>(false)
 const genId = () => crypto.randomUUID()
 
-const form = ref({
+const form = ref<FormData>({
   name: "",
   company: "",
   phone: "",
@@ -47,11 +60,24 @@ function removeTechnical(i: number) {
 }
 
 async function submitForm() {
-  if (!authStore.user?.uid || !valid.value) return
+  if (!authStore.user?.uid) {
+    $q.notify({
+      type: "negative",
+      message: "Error de autenticación. Por favor, recarga la página.",
+    })
+    return
+  }
+
+  if (!valid.value) {
+    $q.notify({
+      type: "negative",
+      message: "Por favor completa todos los campos requeridos",
+    })
+    return
+  }
 
   loading.value = true
   try {
-    // Mapeamos technical a tecnicos para que coincida con el store
     const setupData = {
       name: form.value.name,
       company: form.value.company,

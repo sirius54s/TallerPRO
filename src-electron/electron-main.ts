@@ -98,7 +98,7 @@ async function createWindow() {
   log.info("📦 Creando ventana principal")
 
   mainWindow = new BrowserWindow({
-    icon: path.resolve(__dirname, "icons/icon.png"),
+    icon: path.join(__dirname, "src-electron/icons/icon.ico"),
     width: 1000,
     height: 730,
     resizable: false,

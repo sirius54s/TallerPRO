@@ -93,7 +93,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   function initializeAuth() {
     return new Promise<void>((resolve) => {
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      onAuthStateChanged(auth, (currentUser) => {
         const wasLoggedIn = !!user.value
         const isNowLoggedIn = !!currentUser
 
@@ -109,8 +109,6 @@ export const useAuthStore = defineStore("auth", () => {
           resolve()
         }
       })
-
-      return unsubscribe
     })
   }
 

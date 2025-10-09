@@ -49,8 +49,8 @@ interface UserData {
 const DEFAULT_SETTINGS: Settings = {
   theme: "light",
   modules: {
-    addRepair: { name: "Agregar reparación", install: true, disable: true },
-    reports: { name: "Reportes y Estadísticas", install: true, disable: true },
+    addRepair: { name: "Agregar reparación", install: true, disable: false },
+    reports: { name: "Reportes y Estadísticas", install: true, disable: false },
   },
 }
 
