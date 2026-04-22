@@ -103,7 +103,16 @@ async function marcarComoListo(repair: Repair) {
   $q.dialog({
     title: "Confirmar",
     message: `¿Marcar la reparación de ${repair.model} como completada?`,
-    cancel: true,
+    cancel: {
+      label: "Cancelar",
+      color: $q.dark.isActive ? "white" : "black",
+      flat: true,
+    },
+    ok: {
+      label: "Confirmar?",
+      color: "green",
+      flat: true,
+    },
     persistent: true,
   }).onOk(async () => {
     await repairsStore.updateRepairStatus(repair.id, "Completado")
@@ -145,7 +154,16 @@ function mostrarOpciones(row: Repair) {
         value: opt.label,
       })),
     },
-    cancel: true,
+    ok: {
+      label: "Aceptar",
+      color: "blue-8",
+      flat: true,
+    },
+    cancel: {
+      label: "Cancelar",
+      color: $q.dark.isActive ? "white" : "black",
+      flat: true,
+    },
   }).onOk((selectedOption) => {
     const option = options.find((opt) => opt.label === selectedOption)
     if (option) option.action()
@@ -166,7 +184,11 @@ function verDetalles(repair: Repair) {
       ${repair.detailNote ? `<strong>Notas:</strong> ${repair.detailNote}` : ""}
     `,
     html: true,
-    ok: "Cerrar",
+    ok: {
+      label: "Cerrar",
+      color: "blue-8",
+      flat: true,
+    },
   })
 }
 
@@ -189,7 +211,17 @@ function cambiarEstado(repair: Repair) {
       model: repair.status,
       items: estados.map((estado) => ({ label: estado, value: estado })),
     },
-    cancel: true,
+
+    ok: {
+      label: "Aceptar",
+      color: "blue-8",
+      flat: true,
+    },
+    cancel: {
+      label: "Cancelar",
+      color: $q.dark.isActive ? "white" : "black",
+      flat: true,
+    },
   }).onOk(async (nuevoEstado) => {
     if (nuevoEstado !== repair.status) {
       await repairsStore.updateRepairStatus(repair.id, nuevoEstado)
@@ -201,7 +233,11 @@ function eliminarReparacion(repair: Repair) {
   $q.dialog({
     title: "Confirmar eliminación",
     message: `¿Estás seguro de eliminar la reparación de ${repair.model}?`,
-    cancel: true,
+    cancel: {
+      label: "Cancelar",
+      color: $q.dark.isActive ? "white" : "black",
+      flat: true,
+    },
     persistent: true,
     color: "negative",
   }).onOk(async () => {

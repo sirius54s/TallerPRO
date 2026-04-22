@@ -23,7 +23,7 @@ onMounted(async () => {
 <template>
   <div>
     <div class="absolute-full flex flex-center flex-col text-center">
-      <q-spinner-ball v-if="loading" color="primary" size="12em" />
+      <q-spinner-cube v-if="loading" color="primary" size="12em" />
       <p v-if="!conectionInternet" class="text-center">
         No hay conexion a internet...
       </p>

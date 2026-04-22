@@ -73,10 +73,12 @@ function handleConfigSave(settings: Settings) {
 <template>
   <q-toolbar
     style="min-height: 40px; padding: 0 10px"
-    :class="Dark.isActive ? 'bg-grey-9 text-white' : 'bg-grey-1 text-black'"
+    :class="Dark.isActive ? 'bg-grey-9 text-white' : 'bg-grey-2 text-dark'"
   >
     <q-toolbar-title>
-      <q-badge outline align="middle" color="teal">BETA v{{ version }}</q-badge>
+      <q-badge outline align="middle" :color="Dark.isActive ? 'white ' : 'dark'"
+        >BETA v{{ version }}</q-badge
+      >
     </q-toolbar-title>
 
     <q-btn

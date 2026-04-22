@@ -1,6 +1,5 @@
 import { app, BrowserWindow, dialog, Menu, shell, ipcMain } from "electron"
 import path from "path"
-import os from "os"
 import { fileURLToPath } from "url"
 
 // electron-updater es CommonJS, lo importamos como default y extraemos autoUpdater
@@ -94,12 +93,16 @@ async function showUpdateReadyDialog(info: any) {
 // 4. VENTANA PRINCIPAL
 // =============================================================================
 
+const iconPath = path.join(__dirname, "build", "icon.png")
+
+app.setAppUserModelId("com.TallerPRO")
+
 async function createWindow() {
   log.info("📦 Creando ventana principal")
 
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, "src-electron/icons/icon.ico"),
-    width: 1000,
+    icon: iconPath,
+    width: 1100,
     height: 730,
     resizable: false,
     autoHideMenuBar: true,
